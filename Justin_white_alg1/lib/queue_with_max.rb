@@ -12,18 +12,37 @@ class QueueWithMax
   attr_accessor :store
 
   def initialize
+    @store = RingBuffer.new
+    @max_queue = RingBuffer.new
   end
 
   def enqueue(val)
+    store.unshift(val)
+    if max_queue.empty?
+      max_queue.unshift(val)
+    else
+      i = max_queue.length
+      while i > 0
+        if  max_queue[i] < val
+          max_queue.pop
+        end
+        i -= 1
+      end
+      max_queue.unshift(val)
+    end
   end
 
   def dequeue
+    # on if the front of the dequeue is equal to the front... on the SO post
+    store.shift
   end
 
   def max
+    @max_queue[0]
   end
 
   def length
+    store.length
   end
 
 end

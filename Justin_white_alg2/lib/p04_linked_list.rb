@@ -87,6 +87,23 @@ class LinkedList
     end
   end
 
+  def reverse
+    each do |node|
+      if node == @head
+        @tail.next = @head.next
+        @head.next = nil
+        @head.prev = @tail.prev
+        @tail.prev = nil
+      elsif node == @tail
+        next
+      else
+        temp = node.next
+        node.next = node.prev
+        node.prev = temp
+      end
+    end
+  end
+
   def to_s
     inject([]) { |acc, node| acc << "[#{node.key}, #{node.val}]" }.join(", ")
   end
